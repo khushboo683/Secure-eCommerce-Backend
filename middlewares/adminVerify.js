@@ -4,13 +4,15 @@ import { BadRequestError, UnauthorizedError } from "../utils/error.js";
 
 export async function AdminVerify(req, res, next) {
     try {
+        console.log("headers",req.headers)
         const authHeader = req.headers["cookie"]; // get the session cookie from request header
-
+console.log("auth header",authHeader)
         if (!authHeader) throw new BadRequestError('Missing authorization headers!'); // if there is no cookie from request header, send an unauthorized response.
         const cookie = authHeader.split("=")[1]; // If there is, split the cookie string to get the actual jwt
 
         // Verify using jwt to see if token has been tampered with or if it has expired.
         // that's like checking the integrity of the cookie
+        console.log("cookie",cookie)
         jwt.verify(cookie, process.env.JWT_SECRET_KEY, async (err, decoded) => {
             if (err) {
                 // if token has been altered or has expired, return an unauthorized error

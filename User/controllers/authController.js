@@ -15,7 +15,7 @@ export const login = async (req, res, next) => {
   
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        throw BadRequestError('Incorrect credentials');
+        throw new BadRequestError('Incorrect credentials');
       }
   
       const payload = { id: user._id };
