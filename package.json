@@ -1,0 +1,33 @@
+{
+  "name": "secure-ecommerce-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A scalable server-side application for an e-commerce platform, focusing on creating robust APIs, integrating with third-party services, and ensuring secure and efficient data handling.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khushboo683/Secure-eCommerce-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/khushboo683/Secure-eCommerce-Backend/issues"
+  },
+  "homepage": "https://github.com/khushboo683/Secure-eCommerce-Backend#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.7.0",
+    "mongoose": "^8.4.3",
+    "nodemon": "^3.1.4"
+  }
+}
