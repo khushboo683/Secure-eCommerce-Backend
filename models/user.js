@@ -7,13 +7,19 @@ const addressSchema = new mongoose.Schema({
     state: String,
     pincode: String
 })
-const cartSchema = new mongoose.Schema({
-    product: {
+const itemInCartSchema= new mongoose.Schema({
+product: {
         type:mongoose.Schema.Types.ObjectId,
         ref:'Product'
     },
-    count:Number
+    count:{type:Number, default:0}
 })
+const cartSchema = new mongoose.Schema({
+   items: [{type:itemInCartSchema}],
+cartValue:{
+    type:Number,
+    default:0
+}},{ _id : false })
 const userSchema = new mongoose.Schema({
     name: { type: String, required:true},
     email:{ type: String, required:true, unique:true},
@@ -29,7 +35,7 @@ const userSchema = new mongoose.Schema({
     orders:[{
         type: mongoose.Schema.Types.ObjectId, ref: 'Order'
     }],
-    cart: [{type: cartSchema}]
+    cart: {type: cartSchema}
 },{
     timestamps:true
 })

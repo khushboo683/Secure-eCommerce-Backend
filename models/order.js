@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import { OrderStatus } from '../enums/deliveryStatus';
+import { DeliveryStatus } from '../enums/deliveryStatus.js';
+import { OrderStatus } from '../enums/orderStatus.js';
 
 const orderSchema = new mongoose.Schema({
     products:[{
@@ -8,11 +9,13 @@ const orderSchema = new mongoose.Schema({
         required:true
     }],
     totalAmount: { type:Number, required:true},
+    OrderStatus:{
+       type: String,
+       enum: Object.values(OrderStatus)
+    },
     deliveryStatus: {
         type: String,
-        enum:Object.values(OrderStatus),
-        default: OrderStatus.PENDING,
-        required:true
+        enum:Object.values(DeliveryStatus),
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
