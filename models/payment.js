@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { PaymentMethod, PaymentStatus } from '../enums/payment';
+import { PaymentMethod, PaymentStatus } from '../enums/payment.js';
 
 const paymentSchema = new mongoose.Schema({
     user: { 

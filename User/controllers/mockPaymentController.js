@@ -1,33 +1,45 @@
 import nock from 'nock';
-
+import {v4 as uuidv4} from 'uuid'
+import axios from 'axios';
   // Mock payment functions
-export const makeStripePayment = async (amount) => {
+export const makeStripePayment = async (amount,currency) => {
     // Simulate calling Stripe API
-    const response = await nock('https://api.stripe.com')
+    const chargeId = uuidv4();
+    nock('https://api.stripe.com')
       .post('/v1/charges', {
         amount,
-        currency: 'usd',
-        source: 'mock_source', // Mock payment source
+        currency
       })
       .reply(200, {
-        id: 'charge_id',
+        id: chargeId,
         amount,
         currency: 'usd',
         status: 'succeeded',
       });
-    return response;
+
+      const response = await axios.post('https://api.stripe.com/v1/charges', {amount, currency },{
+        headers: { 'Content-Type': 'application/json' }
+      });
+      console.log("response from strip", response.data)
+    return response?.data;
   };
 
-  export const makePaypalPayment = async (amount) => {
-    // Simulate calling PayPal API
-    // Note: Replace the mock logic with PayPal API mock using nock
-    const response = nock('https://api.stripe.com')
-    .post('/v1/charges')
+  export const makePaypalPayment = async (amount, currency) => {
+    const chargeId = uuidv4();
+    nock('https://api.paypal.com')
+    .post('/v1/charges',{
+        amount,
+        currency
+    })
     .reply(200, {
-      id: 'charge_id',
-      amount: 2000,
+      id: chargeId,
+      amount,
       currency: 'usd',
       status: 'succeeded',
     });
-    return response;
+    const response = await axios.post('https://api.paypal.com', {amount, currency },{
+        headers: { 'Content-Type': 'application/json' }
+      });
+      console.log("response from strip", response.data)
+    return response?.data;
   };

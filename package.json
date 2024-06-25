@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/khushboo683/Secure-eCommerce-Backend#readme",
   "dependencies": {
+    "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
@@ -29,6 +30,7 @@
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.3",
     "nock": "^13.5.4",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "uuid": "^10.0.0"
   }
 }

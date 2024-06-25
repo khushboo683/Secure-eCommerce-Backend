@@ -1,17 +1,23 @@
 import mongoose from 'mongoose';
 import { DeliveryStatus } from '../enums/deliveryStatus.js';
 import { OrderStatus } from '../enums/orderStatus.js';
-
+const itemInOrderSchema= new mongoose.Schema({
+    product: {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Product'
+        },
+        count:{type:Number, default:0}
+    })
 const orderSchema = new mongoose.Schema({
     products:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'Product',
+        type: itemInOrderSchema,
         required:true
     }],
     totalAmount: { type:Number, required:true},
-    OrderStatus:{
+    orderStatus:{
        type: String,
-       enum: Object.values(OrderStatus)
+       enum: Object.values(OrderStatus),
+       required:true
     },
     deliveryStatus: {
         type: String,
@@ -25,7 +31,6 @@ const orderSchema = new mongoose.Schema({
     paymentDetails: {
         type: mongoose.Schema.Types.ObjectId,
         ref:'Payment',
-        required: true
     }
 
 },{
