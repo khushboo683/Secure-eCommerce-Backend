@@ -2,9 +2,31 @@ import {makeStripePayment, makePaypalPayment} from './mockPaymentController.js';
 import { PaymentMethod, PaymentStatus } from '../../enums/payment.js';
 import { OrderStatus } from '../../enums/orderStatus.js';
 import { BadRequestError, InternalServerError, NotFoundError } from '../../utils/error.js';
+import {mockLogisticsProvider, mockDeliveryStatus} from './mockLogisticsController.js';
 import Order from '../../models/order.js';
 import Payment from '../../models/payment.js';
 import User from '../../models/user.js';
+
+const createNewShipment= async(user,order)=>{
+  const shipmentDetails={
+    address: user?.address,
+    orderValue: order?.totalAmount,
+    paymentDetails: order?.paymentDetails
+    
+  }
+ const response = await mockLogisticsProvider(shipmentDetails);
+ if(!response){
+    throw new InternalServerError('Something went wrong while creating a shipment request!');
+ }
+ await Order.findByIdAndUpdate(order._id,{
+    $set:{
+        deliveryDetails:{
+            trackingId: response?.trackingId,
+            deliveryStatus: response?.status
+        }
+    }
+ })
+}
 
 export const checkout=async(req,res,next)=>{
     try{
@@ -16,7 +38,7 @@ export const checkout=async(req,res,next)=>{
               if (!user) {
                 throw new NotFoundError('User does not exist.');
               }
-          
+
               if (user?.cart?.items?.length<=0 || user?.cart?.cartValue<=0) {
                 throw new BadRequestError('Cart is empty.');
               }
@@ -72,6 +94,7 @@ export const checkout=async(req,res,next)=>{
               user.cart.items = [];
               user.cart.cartValue = 0;
               await user.save();
+              await createNewShipment(user,order);
           
               res.success({ message: 'Checkout successful', order, payment });
             
@@ -111,6 +134,33 @@ export const cancelOrder = async(req,res,next)=>{
         }
         
         res.success(order);
+    }catch(err){
+        next(err);
+    }
+}
+
+export const getDeliveryStatus= async(req,res,next)=>{
+    try{
+
+        const{orderId} = req.params;
+        const order = await Order.findById(orderId).populate('deliveryDetails');
+        if(!order){
+            throw new NotFoundError('Order does not exist');
+        }
+        const trackingId = order?.trackingId
+        if(!trackingId){
+            throw new NotFoundError('Tracking id is absent.');
+        }
+       const response = await mockDeliveryStatus(trackingId);
+       if(!response){
+        throw new InternalServerError('Something went wrong while fetching delivery status!')
+       }
+       await order.findByIdUpdate(orderId,{
+        deliveryDetails:{
+            status: response?.status
+        }
+       },{new : true})
+       res.success(order)
     }catch(err){
         next(err);
     }

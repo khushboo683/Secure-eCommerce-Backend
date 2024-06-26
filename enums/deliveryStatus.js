@@ -1,4 +1,5 @@
 export const DeliveryStatus = {
+    SHIPMENT_CREATED:'SHIPMENT_CREATED',
     SHIPPED: 'SHIPPED',
     IN_TRANSIT:'IN_TRANSIT',
     PICKED_UP:'PICKED_UP',

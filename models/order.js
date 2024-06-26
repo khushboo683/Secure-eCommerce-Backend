@@ -8,6 +8,13 @@ const itemInOrderSchema= new mongoose.Schema({
         },
         count:{type:Number, default:0}
     })
+const deliveryDetailsSchema= new mongoose.Schema({
+    trackingId: String,
+    deliveryStatus:{
+        type: String,
+        enum:Object.values(DeliveryStatus),
+    }
+})    
 const orderSchema = new mongoose.Schema({
     products:[{
         type: itemInOrderSchema,
@@ -19,9 +26,8 @@ const orderSchema = new mongoose.Schema({
        enum: Object.values(OrderStatus),
        required:true
     },
-    deliveryStatus: {
-        type: String,
-        enum:Object.values(DeliveryStatus),
+    deliveryDetails: {
+       type: deliveryDetailsSchema
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

@@ -29,9 +29,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "0x88"
     },
-    address: [{
+    address: {
         type: addressSchema
-    }],
+    },
     orders:[{
         type: mongoose.Schema.Types.ObjectId, ref: 'Order'
     }],

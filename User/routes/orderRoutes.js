@@ -3,7 +3,7 @@ import { Verify } from '../../middlewares/verify.js';
 import { PaymentMethod } from '../../enums/payment.js';
 import {check} from 'express-validator';
 import Validate from '../../middlewares/validate.js';
-import { checkout } from '../controllers/orderController.js';
+import { cancelOrder, checkout } from '../controllers/orderController.js';
 const router = express.Router();
 
 router.post('/checkout',
@@ -16,5 +16,10 @@ router.post('/checkout',
      Verify,
      checkout
 
+)
+
+router.post('/:orderId/cancel',
+    Verify,
+    cancelOrder
 )
 export default router
